@@ -29,6 +29,9 @@ public class Swerve extends SubsystemBase {
     StructArrayPublisher<SwerveModuleState> ntSwerveModuleStates = NetworkTableInstance.getDefault()
     .getStructArrayTopic("MyStates", SwerveModuleState.struct).publish();
 
+    StructArrayPublisher<SwerveModuleState> ntSwerveModuleMeasured = NetworkTableInstance.getDefault()
+    .getStructArrayTopic("MyMeasuredStates", SwerveModuleState.struct).publish();
+
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.Swerve.drivetrainCanBus);
@@ -62,6 +65,8 @@ public class Swerve extends SubsystemBase {
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
 
         ntSwerveModuleStates.set(swerveModuleStates);
+
+        ntSwerveModuleMeasured.set(getModuleStates());
         
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
