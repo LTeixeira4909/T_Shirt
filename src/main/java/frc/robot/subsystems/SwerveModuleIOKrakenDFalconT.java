@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.subsystems;
 
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -8,13 +8,14 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.lib.math.Conversions;
 import frc.lib.util.SwerveModuleConstants;
+import frc.robot.Constants;
+import frc.robot.Robot;
 
-public class SwerveModule {
+public class SwerveModuleIOKrakenDFalconT implements SwerveModuleIO {
     public int moduleNumber;
     private Rotation2d angleOffset;
 
@@ -31,7 +32,7 @@ public class SwerveModule {
     /* angle motor control requests */
     private final PositionVoltage anglePosition = new PositionVoltage(0);
 
-    public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
+    public SwerveModuleIOKrakenDFalconT(int moduleNumber, SwerveModuleConstants moduleConstants){
         this.moduleNumber = moduleNumber;
         this.angleOffset = moduleConstants.angleOffset;
         
@@ -50,11 +51,16 @@ public class SwerveModule {
         mDriveMotor.getConfigurator().setPosition(0.0);
     }
 
-    public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop){
-        desiredState = SwerveModuleState.optimize(desiredState, getState().angle); 
-        SmartDashboard.putNumber("rotaton_"+this.moduleNumber, desiredState.angle.getRotations());
-        mAngleMotor.setControl(anglePosition.withPosition(desiredState.angle.getRotations()));
-        setSpeed(desiredState, isOpenLoop);
+    
+
+    @Override
+    public void setSwerveModule(SwerveModuleState desiredHeadingAndSpeed) {
+        boolean isOpenLoop = false; // maybe we'll want this later
+        
+        desiredHeadingAndSpeed = SwerveModuleState.optimize(desiredHeadingAndSpeed, getState().angle); 
+        SmartDashboard.putNumber("rotaton_"+this.moduleNumber, desiredHeadingAndSpeed.angle.getRotations());
+        mAngleMotor.setControl(anglePosition.withPosition(desiredHeadingAndSpeed.angle.getRotations()));
+        setSpeed(desiredHeadingAndSpeed, isOpenLoop);
     }
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){
@@ -69,15 +75,6 @@ public class SwerveModule {
         }
     }
 
-    public Rotation2d getCANcoder(){
-        return Rotation2d.fromRotations(angleEncoder.getAbsolutePosition().getValue());
-    }
-
-    public void resetToAbsolute(){
-        double absolutePosition = getCANcoder().getRotations() - angleOffset.getRotations();
-        mAngleMotor.setPosition(absolutePosition);
-    }
-
     public SwerveModuleState getState(){
         return new SwerveModuleState(
             Conversions.RPSToMPS(mDriveMotor.getVelocity().getValue(), Constants.Swerve.wheelCircumference), 
@@ -85,11 +82,10 @@ public class SwerveModule {
         );
     }
 
-    public SwerveModulePosition getPosition(){
-        return new SwerveModulePosition(
-            Conversions.rotationsToMeters(mDriveMotor.getPosition().getValue(), Constants.Swerve.wheelCircumference), 
-            Rotation2d.fromRotations(mAngleMotor.getPosition().getValue())
-        );
+    @Override
+    public void readInputsFromHardware(SwerveModuleInputs inputs) {
+
+        
     }
     
 }
