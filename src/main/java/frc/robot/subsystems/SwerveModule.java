@@ -9,10 +9,14 @@ public class SwerveModule extends SubsystemBase {
 
     SwerveModuleIO m_io;
     SwerveModuleInputs m_inputs = new SwerveModuleInputs();
-    public int moduleNumber;
+    public int m_moduleNumber;
 
     public SwerveModule(SwerveModuleIO io, int moduleNumber) {
         this.m_io = io;
+        this.m_moduleNumber = moduleNumber;
+
+        m_inputs.measuredPosition = new SwerveModulePosition();
+        m_inputs.measuredHeadingAndSpeed = new SwerveModuleState();
     }
 
     @Override
