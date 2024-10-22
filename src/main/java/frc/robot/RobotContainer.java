@@ -14,6 +14,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Pivot.Pivot;
+import frc.robot.subsystems.Pivot.PivotIO;
+import frc.robot.subsystems.Pivot.PivotIOTalonFX;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -34,8 +37,14 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
+    private final JoystickButton pivotUp = new JoystickButton(driver, XboxController.Button.kA.value);
+    private final JoystickButton pivotDown = new JoystickButton(driver, XboxController.Button.kB.value);
+
+
+
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
+    private final Pivot s_pivot = new Pivot(new PivotIOTalonFX());
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -68,6 +77,8 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        pivotUp.whileTrue(s_pivot.pivotUp());
+        pivotDown.whileTrue(s_pivot.pivotDown());
     }
 
     /**
