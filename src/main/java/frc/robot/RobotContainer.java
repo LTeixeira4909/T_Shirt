@@ -40,11 +40,12 @@ public class RobotContainer {
     private final JoystickButton pivotUp = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton pivotDown = new JoystickButton(driver, XboxController.Button.kB.value);
 
-
+    private final Joystick shoot = new JoystickButton(driver,XboxController.Button.rightTrigger.value);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final Pivot s_pivot = new Pivot(new PivotIOTalonFX());
+    private final Solenoid m_solenoid = new Solenoid(PneumaticsModuleType.REVPH, 0);
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
