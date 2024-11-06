@@ -16,7 +16,7 @@ public final class Constants {
     public static final double stickDeadband = 0.1;
 
     public static final class Swerve {
-        public static final String drivetrainCanBus = "CANivore1";
+        // public static final String drivetrainCanBus = "CANivore1";
 
         public static final int pigeonID = 20;
 

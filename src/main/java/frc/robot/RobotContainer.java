@@ -4,6 +4,8 @@ import javax.xml.xpath.XPathConstants;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Axis;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -40,12 +42,13 @@ public class RobotContainer {
     private final JoystickButton pivotUp = new JoystickButton(driver, XboxController.Button.kA.value);
     private final JoystickButton pivotDown = new JoystickButton(driver, XboxController.Button.kB.value);
 
-    private final Joystick shoot = new JoystickButton(driver,XboxController.Button.rightTrigger.value);
-
+    private final JoystickButton shoot = new JoystickButton(driver,XboxController.Button.kRightBumper.value);
+    
+    private final JoystickButton close = new JoystickButton(driver,XboxController.Button.kLeftBumper.value);
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final Pivot s_pivot = new Pivot(new PivotIOTalonFX());
-    private final Solenoid m_solenoid = new Solenoid(PneumaticsModuleType.REVPH, 0);
+    private final Shooter s_Shooter = new Shooter();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -80,6 +83,8 @@ public class RobotContainer {
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         pivotUp.whileTrue(s_pivot.pivotUp());
         pivotDown.whileTrue(s_pivot.pivotDown());
+        shoot.onTrue(s_Shooter.shoot());
+        close.onTrue(s_Shooter.close());
     }
 
     /**

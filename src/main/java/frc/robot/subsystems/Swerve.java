@@ -33,7 +33,7 @@ public class Swerve extends SubsystemBase {
             .getStructArrayTopic("MyMeasuredStates", SwerveModuleState.struct).publish();
 
     public Swerve() {
-        gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.Swerve.drivetrainCanBus);
+        gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.getConfigurator().apply(new Pigeon2Configuration());
         gyro.setYaw(0);
 

@@ -12,7 +12,7 @@ public class Pivot extends SubsystemBase{
 
     public Pivot(PivotIO io){
         m_io = io;
-        setDefaultCommand(idle());
+        
     }
 
     @Override
