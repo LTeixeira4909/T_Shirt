@@ -40,16 +40,16 @@ public class SwerveModuleIOKrakenDFalconT implements SwerveModuleIO {
         this.angleOffset = moduleConstants.angleOffset;
 
         /* Angle Encoder Config */
-        angleEncoder = new CANcoder(moduleConstants.cancoderID);
+        angleEncoder = new CANcoder(moduleConstants.cancoderID,"CANivore1");
         angleEncoder.getConfigurator().apply(Robot.ctreConfigs.swerveCANcoderConfig);
 
         /* Angle Motor Config */
-        mAngleMotor = new TalonFX(moduleConstants.angleMotorID);
+        mAngleMotor = new TalonFX(moduleConstants.angleMotorID,"CANivore1");
         mAngleMotor.getConfigurator().apply(Robot.ctreConfigs.swerveAngleFXConfig);
         setTalonEncoderToAbsoluteValueWithOffset();
 
         /* Drive Motor Config */
-        mDriveMotor = new TalonFX(moduleConstants.driveMotorID);
+        mDriveMotor = new TalonFX(moduleConstants.driveMotorID,"CANivore1");
         mDriveMotor.getConfigurator().apply(Robot.ctreConfigs.swerveDriveFXConfig);
         mDriveMotor.getConfigurator().setPosition(0.0);
     }
@@ -102,6 +102,11 @@ public class SwerveModuleIOKrakenDFalconT implements SwerveModuleIO {
 
     @Override
     public void setTalonEncoderToAbsoluteValueWithOffset() {
+        System.out.println("CANCODER");
+        System.out.println(getCANcoderMeasuredHeading().getRotations());
+
+        System.out.println("\nOFFSET:");
+        System.out.println(angleOffset.getRotations());
         double absolutePosition = getCANcoderMeasuredHeading().getRotations() - angleOffset.getRotations();
         mAngleMotor.setPosition(absolutePosition);
     }

@@ -12,6 +12,7 @@ public class Pivot extends SubsystemBase{
 
     public Pivot(PivotIO io){
         m_io = io;
+        // setDefaultCommand(this.idle());
         
     }
 
@@ -19,6 +20,7 @@ public class Pivot extends SubsystemBase{
     public void periodic() {
         m_io.updateInputs(m_inputs);
         Logger.processInputs("PivotInputs", m_inputs);
+        // System.out.println(this.getCurrentCommand() != null ? this.getCurrentCommand().getName() : "NULL");
     }
 
     public Command pivotUp(){
